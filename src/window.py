@@ -20,6 +20,7 @@
 from gi.repository import Adw
 from gi.repository import Gtk
 
+
 @Gtk.Template(resource_path='/io/github/fabrialberio/landscapes/ui/window.ui')
 class Window(Adw.ApplicationWindow):
     __gtype_name__ = 'Window'

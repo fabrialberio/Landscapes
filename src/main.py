@@ -17,62 +17,45 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-import sys
-import gi
-
-gi.require_version('Gtk', '4.0')
-gi.require_version('Adw', '1')
-
-from gi.repository import Gtk, Gio, Adw
 from .window import Window
 
+from gi.repository import Gtk, Gio, Adw
+from gi import require_version
 
-class Application(Adw.Application):
-    """The main application singleton class."""
+from typing import Optional
+from sys import argv
 
+require_version('Gtk', '4.0')
+require_version('Adw', '1')
+
+
+class Landscapes(Adw.Application):
     def __init__(self):
-        super().__init__(application_id='io.github.fabrialberio.landscapes',
-                         flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
-        self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
-        self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
+        super().__init__(
+            application_id='io.github.fabrialberio.landscapes',
+            flags=Gio.ApplicationFlags.DEFAULT_FLAGS
+        )
+
+        self._create_action('quit', self._quit_action, ['<primary>q'])
+        self._create_action('about', self._about_action)
 
     def do_activate(self):
-        """Called when the application is activated.
+        window = Window(application=self)
+        window.present()
 
-        We raise the application's main window, creating it if
-        necessary.
-        """
-        win = self.props.active_window
-        if not win:
-            win = Window(application=self)
-        win.present()
+    def _about_action(self, action: Gio.SimpleAction, param: None):
+        builder = Gtk.Builder.new_from_resource(
+            '/io/github/fabrialberio/landscapes/ui/about-window.ui')
 
-    def on_about_action(self, widget, _):
-        """Callback for the app.about action."""
-        about = Adw.AboutWindow(transient_for=self.props.active_window,
-                                application_name='landscapes',
-                                application_icon='io.github.fabrialberio.landscapes',
-                                developer_name='Fabrizio',
-                                version='0.1.0',
-                                developers=['Fabrizio'],
-                                copyright='© 2024 Fabrizio')
-        about.present()
+        about_window: Adw.AboutWindow = builder.get_object('about-window')
+        about_window.set_transient_for(self.get_active_window())
+        about_window.present()
 
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        print('app.preferences action activated')
+    def _quit_action(self, action: Gio.SimpleAction, param: None):
+        self.quit()
 
-    def create_action(self, name, callback, shortcuts=None):
-        """Add an application action.
-
-        Args:
-            name: the name of the action
-            callback: the function to be called when the action is
-              activated
-            shortcuts: an optional list of accelerators
-        """
-        action = Gio.SimpleAction.new(name, None)
+    def _create_action(self, name: str, callback, shortcuts=None, param=None):
+        action = Gio.SimpleAction.new(name, param)
         action.connect("activate", callback)
         self.add_action(action)
         if shortcuts:
@@ -80,6 +63,5 @@ class Application(Adw.Application):
 
 
 def main(version):
-    """The application's entry point."""
-    app = Application()
-    return app.run(sys.argv)
+    app = Landscapes()
+    return app.run(argv)
