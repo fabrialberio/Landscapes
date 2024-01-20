@@ -2,11 +2,15 @@ pkgdatadir = get_option('prefix') / get_option('datadir') / meson.project_name()
 moduledir = pkgdatadir / 'landscapes'
 gnome = import('gnome')
 
+subdir('ui')
+
 gnome.compile_resources('landscapes',
   'landscapes.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
+  source_dir: meson.current_build_dir(),
+  dependencies: blueprints,
 )
 
 python = import('python')

@@ -24,10 +24,10 @@ gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio, Adw
-from .window import LandscapesWindow
+from .window import Window
 
 
-class LandscapesApplication(Adw.Application):
+class Application(Adw.Application):
     """The main application singleton class."""
 
     def __init__(self):
@@ -45,7 +45,7 @@ class LandscapesApplication(Adw.Application):
         """
         win = self.props.active_window
         if not win:
-            win = LandscapesWindow(application=self)
+            win = Window(application=self)
         win.present()
 
     def on_about_action(self, widget, _):
@@ -81,5 +81,5 @@ class LandscapesApplication(Adw.Application):
 
 def main(version):
     """The application's entry point."""
-    app = LandscapesApplication()
+    app = Application()
     return app.run(sys.argv)
