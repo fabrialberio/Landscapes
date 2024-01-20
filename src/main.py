@@ -19,10 +19,9 @@
 
 from .window import Window
 
-from gi.repository import Gtk, Gio, Adw
+from gi.repository import Adw, Gio, Gtk
 from gi import require_version
 
-from typing import Optional
 from sys import argv
 
 require_version('Gtk', '4.0')
