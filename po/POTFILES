@@ -1,0 +1,6 @@
+data/io.github.fabrialberio.landscapes.desktop.in
+data/io.github.fabrialberio.landscapes.metainfo.xml.in
+data/io.github.fabrialberio.landscapes.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

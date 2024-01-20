@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="landscapes">
+	<schema id="io.github.fabrialberio.landscapes" path="/io/github/fabrialberio/landscapes/">
+	</schema>
+</schemalist>
