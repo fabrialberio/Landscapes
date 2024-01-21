@@ -11,19 +11,45 @@ template $Window : Adw.ApplicationWindow {
       [end]
       MenuButton {
         primary: true;
-        icon-name: "open-menu-symbolic";
-        tooltip-text: _("Menu");
+        icon-name: 'open-menu-symbolic';
+        tooltip-text: _('Menu');
         menu-model: primary_menu;
       }
     }
 
-    content: 
-    Label label {
-      label: "Hello, World!";
+    content:
+    Adw.Clamp {
+      child:
+      ScrolledWindow {
+        child:
+        Box {
+          vexpand: true;
+          orientation: vertical;
+          spacing: 24;
+          margin-top: 6;
+          margin-bottom: 6;
+          margin-start: 12;
+          margin-end: 12;
+          
+          Adw.PreferencesGroup group_your_backgrounds {
+            title: 'Your backgrounds';
+            header-suffix:
+            Button {
+              styles ['flat']
+              
+              Adw.ButtonContent {
+                icon-name: 'list-add-symbolic';
+                label: 'Add';
+              }
+            };
+          }
 
-      styles [
-        "title-1",
-      ]
+          Adw.PreferencesGroup group_system_backgrounds {
+            title: 'System backgrounds';
+            description: 'These backgrounds are included with your system and cannot be changed';
+          }
+        };
+      };
     };
   };
 }
@@ -31,18 +57,18 @@ template $Window : Adw.ApplicationWindow {
 menu primary_menu {
   section {
     item {
-      label: _("_Preferences");
-      action: "app.preferences";
+      label: _('_Preferences');
+      action: 'app.preferences';
     }
 
     item {
-      label: _("_Keyboard Shortcuts");
-      action: "win.show-help-overlay";
+      label: _('_Keyboard Shortcuts');
+      action: 'win.show-help-overlay';
     }
 
     item {
-      label: _("_About Cirrus");
-      action: "app.about";
+      label: _('_About Cirrus');
+      action: 'app.about';
     }
   }
 }
