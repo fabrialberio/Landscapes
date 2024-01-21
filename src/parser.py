@@ -28,6 +28,22 @@ def dump_wallpapers(xml_path: Path, wallpapers: list['WallpaperElement']):
         ElementTree.indent(element, space='    ')
         ElementTree.ElementTree(element).write(xml_file, xml_declaration=False)
 
+def append_wallpaper(xml_path: Path, wallpaper: 'WallpaperElement'):
+    '''Appends a WallpaperElement object to an XML file.'''
+
+    wallpapers = load_wallpapers(xml_path)
+    wallpapers.append(wallpaper)
+
+    dump_wallpapers(xml_path, wallpapers)
+
+def remove_wallpaper(xml_path: Path, wallpaper: 'WallpaperElement'):
+    '''Removes a WallpaperElement object from an XML file.'''
+
+    wallpapers = load_wallpapers(xml_path)
+    wallpapers.remove(wallpaper)
+
+    dump_wallpapers(xml_path, wallpapers)
+
 
 class PictureOption(StrEnum):
     NONE =      'none'
@@ -132,3 +148,9 @@ class WallpaperElement:
             xml.set('deleted', 'true' if self.deleted else 'false')
 
         return xml
+
+    def follows_theme(self) -> bool:
+        return self.filename_dark is not None
+    
+    def timed(self) -> bool:
+        return self.filename.suffix == '.xml'
