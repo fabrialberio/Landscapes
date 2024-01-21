@@ -33,6 +33,7 @@ configure_file(
 landscapes_sources = [
   '__init__.py',
   'main.py',
+  'parser.py',
   'window.py',
 ]
 
