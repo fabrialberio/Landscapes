@@ -1,5 +1,6 @@
-from .parser import WallpaperElement
+from .parser import WallpaperElement, ColorShadingType, PictureOption
 
+from typing import Optional
 from pathlib import Path
 
 
@@ -15,8 +16,11 @@ LANDSCAPES_FILE.parent.mkdir(parents=True, exist_ok=True)
 LANDSCAPES_FILE.touch(exist_ok=True)
 
 
-def get_thumbnail_path(wallpaper: WallpaperElement) -> Path:
+def get_thumbnail_path(wallpaper: WallpaperElement) -> Optional[Path]:
     '''Generates a thumbnail for a wallpaper.'''
+
+    if wallpaper.filename is None:
+        return None
 
     return HOST_XDG_DATA / wallpaper.filename.relative_to(XDG_DATA)
 
@@ -26,3 +30,26 @@ def wallpaper_files() -> list[Path]:
     paths = GNOME_BACKGROUND_PROPERTIES_PATH.glob('*.xml')
 
     return [path for path in paths if path != LANDSCAPES_FILE]
+
+def new_wallpaper_gradient(
+        name: str,
+        primary_color: str,
+        secondary_color: str
+    ) -> WallpaperElement:
+    '''Creates a new gradient wallpaper.'''
+
+    return WallpaperElement(
+        name=name,
+        shade_type=ColorShadingType.VERTICAL,
+        primary_color=primary_color,
+        secondary_color=secondary_color,
+    )
+
+def new_wallpaper_image(name: str, image_path: Path) -> WallpaperElement:
+    '''Creates a new image wallpaper.'''
+
+    return WallpaperElement(
+        name=name,
+        filename=image_path,
+        options=[PictureOption.ZOOM],
+    )

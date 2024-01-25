@@ -66,7 +66,7 @@ class ColorShadingType(StrEnum):
 @dataclass
 class WallpaperElement:
     name: str
-    filename: Path
+    filename: Optional[Path] = None
     filename_dark: Optional[Path] = None
     options: list[PictureOption] = field(default_factory=list)
     shade_type: Optional[ColorShadingType] = None
@@ -83,9 +83,11 @@ class WallpaperElement:
         '''
 
         name = xml.find('name').text or ''
-        filename = Path(xml.find('filename').text)
-
+        
         element = cls(name, filename)
+
+        if (filename_el := xml.find('filename')) is not None:
+            element.filename = Path(filename_el.text)
 
         if (filename_dark_el := xml.find('filename-dark')) is not None:
             element.filename_dark = Path(filename_dark_el.text)
@@ -118,9 +120,10 @@ class WallpaperElement:
         name_el.text = self.name
         xml.append(name_el)
 
-        filename_el = ElementTree.Element('filename')
-        filename_el.text = str(self.filename)
-        xml.append(filename_el)
+        if self.filename is not None:
+            filename_el = ElementTree.Element('filename')
+            filename_el.text = str(self.filename)
+            xml.append(filename_el)
 
         if self.filename_dark is not None:
             filename_dark_el = ElementTree.Element('filename-dark')
@@ -156,4 +159,7 @@ class WallpaperElement:
         return self.filename_dark is not None
     
     def timed(self) -> bool:
+        if self.filename is None:
+            return False
+
         return self.filename.suffix == '.xml'
