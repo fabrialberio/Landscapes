@@ -66,6 +66,7 @@ class Window(Adw.ApplicationWindow):
     __gtype_name__ = 'Window'
 
     pref_group_your_wallpapers = Gtk.Template.Child()
+    status_page_no_wallpapers = Gtk.Template.Child()
     pref_group_system_wallpapers = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
@@ -77,19 +78,13 @@ class Window(Adw.ApplicationWindow):
         for file in wallpaper_files():
             system_wallpapers.extend(load_wallpapers(file))
 
-        status_page_no_wallpapers = Adw.StatusPage(
-            icon_name='document-open-symbolic',
-            title='No backgrounds',
-            height_request=200,
-        )
-        status_page_no_wallpapers.add_css_class('compact')
-
         if len(your_wallpapers) > 0:
+            self.status_page_no_wallpapers.set_visible(False)
             update_pref_group(self.pref_group_your_wallpapers, [
                 WallapaperTile(wallpaper) for wallpaper in your_wallpapers
             ])
         else:
-            update_pref_group(self.pref_group_your_wallpapers, [status_page_no_wallpapers])
+            self.status_page_no_wallpapers.set_visible(True)
 
         update_pref_group(self.pref_group_system_wallpapers, [
             WallapaperTile(wallpaper) for wallpaper in system_wallpapers

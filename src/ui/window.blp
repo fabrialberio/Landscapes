@@ -44,6 +44,15 @@ template $Window : Adw.ApplicationWindow {
             };
           }
 
+          Adw.StatusPage status_page_no_wallpapers {
+            styles ['compact']
+
+            title: 'No backgrounds';
+            icon-name: 'folder-symbolic';
+            visible: false;
+            height-request: 200;
+          }
+
           Adw.PreferencesGroup pref_group_system_wallpapers {
             title: 'System backgrounds';
             description: 'These backgrounds are included with your system and cannot be changed';
