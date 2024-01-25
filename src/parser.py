@@ -9,6 +9,9 @@ from dataclasses import dataclass, field
 def load_wallpapers(xml_path: Path) -> list['WallpaperElement']:
     '''Parses an XML file into a list of WallpaperElement objects.'''
 
+    if xml_path.stat().st_size == 0: # Empty file
+        return []
+
     xml = ElementTree.parse(xml_path).getroot()
     return [WallpaperElement.from_xml(e) for e in xml]
 
