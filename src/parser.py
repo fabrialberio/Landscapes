@@ -84,7 +84,7 @@ class WallpaperElement:
 
         name = xml.find('name').text or ''
         
-        element = cls(name, filename)
+        element = cls(name)
 
         if (filename_el := xml.find('filename')) is not None:
             element.filename = Path(filename_el.text)
