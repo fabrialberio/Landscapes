@@ -2,8 +2,8 @@ using Gtk 4.0;
 using Adw 1;
 
 template $Window : Adw.ApplicationWindow {
-  default-width: 600;
-  default-height: 300;
+  default-width: 800;
+  default-height: 560;
   content: 
   Adw.ToolbarView {
     [top]
@@ -18,9 +18,9 @@ template $Window : Adw.ApplicationWindow {
     }
 
     content:
-    Adw.Clamp {
+    ScrolledWindow {
       child:
-      ScrolledWindow {
+      Adw.Clamp {
         child:
         Box {
           vexpand: true;
@@ -31,7 +31,7 @@ template $Window : Adw.ApplicationWindow {
           margin-start: 12;
           margin-end: 12;
           
-          Adw.PreferencesGroup group_your_backgrounds {
+          Adw.PreferencesGroup pref_group_your_backgrounds {
             title: 'Your backgrounds';
             header-suffix:
             Button {
@@ -44,7 +44,7 @@ template $Window : Adw.ApplicationWindow {
             };
           }
 
-          Adw.PreferencesGroup group_system_backgrounds {
+          Adw.PreferencesGroup pref_group_system_backgrounds {
             title: 'System backgrounds';
             description: 'These backgrounds are included with your system and cannot be changed';
           }
@@ -67,7 +67,7 @@ menu primary_menu {
     }
 
     item {
-      label: _('_About Cirrus');
+      label: _('_About Landscapes');
       action: 'app.about';
     }
   }
