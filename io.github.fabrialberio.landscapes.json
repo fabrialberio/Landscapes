@@ -8,7 +8,10 @@
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--filesystem=xdg-data/backgrounds:ro",
+        "--filesystem=~/.local/share/backgrounds:rw",
+        "--filesystem=~/.local/gnome-background-properties:rw"
     ],
     "cleanup" : [
         "/include",
