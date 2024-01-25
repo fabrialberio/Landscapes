@@ -65,17 +65,17 @@ class WallapaperTile(Adw.ActionRow):
 class Window(Adw.ApplicationWindow):
     __gtype_name__ = 'Window'
 
-    pref_group_your_backgrounds = Gtk.Template.Child()
-    pref_group_system_backgrounds = Gtk.Template.Child()
+    pref_group_your_wallpapers = Gtk.Template.Child()
+    pref_group_system_wallpapers = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        your_backgrounds = load_wallpapers(LANDSCAPES_FILE)
-        system_backgrounds = []
+        your_wallpapers = load_wallpapers(LANDSCAPES_FILE)
+        system_wallpapers = []
 
         for file in wallpaper_files():
-            system_backgrounds.extend(load_wallpapers(file))
+            system_wallpapers.extend(load_wallpapers(file))
 
         status_page_no_wallpapers = Adw.StatusPage(
             icon_name='document-open-symbolic',
@@ -84,13 +84,13 @@ class Window(Adw.ApplicationWindow):
         )
         status_page_no_wallpapers.add_css_class('compact')
 
-        if len(your_backgrounds) > 0:
-            update_pref_group(self.pref_group_your_backgrounds, [
-                WallapaperTile(wallpaper) for wallpaper in your_backgrounds
+        if len(your_wallpapers) > 0:
+            update_pref_group(self.pref_group_your_wallpapers, [
+                WallapaperTile(wallpaper) for wallpaper in your_wallpapers
             ])
         else:
-            update_pref_group(self.pref_group_your_backgrounds, [status_page_no_wallpapers])
+            update_pref_group(self.pref_group_your_wallpapers, [status_page_no_wallpapers])
 
-        update_pref_group(self.pref_group_system_backgrounds, [
-            WallapaperTile(wallpaper) for wallpaper in system_backgrounds
+        update_pref_group(self.pref_group_system_wallpapers, [
+            WallapaperTile(wallpaper) for wallpaper in system_wallpapers
         ])
