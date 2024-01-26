@@ -34,6 +34,7 @@ landscapes_sources = [
   '__init__.py',
   'main.py',
   'parser.py',
+  'wallpaper_page.py',
   'wallpaper_utils.py',
   'window.py',
 ]

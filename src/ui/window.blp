@@ -5,61 +5,67 @@ template $Window : Adw.ApplicationWindow {
   default-width: 800;
   default-height: 560;
   content: 
-  Adw.ToolbarView {
-    [top]
-    Adw.HeaderBar header_bar {
-      [end]
-      MenuButton {
-        primary: true;
-        icon-name: 'open-menu-symbolic';
-        tooltip-text: _('Menu');
-        menu-model: primary_menu;
-      }
-    }
-
-    content:
-    ScrolledWindow {
+  Adw.NavigationView navigation_view {
+    Adw.NavigationPage {
+      tag: 'home';
       child:
-      Adw.Clamp {
-        child:
-        Box {
-          vexpand: true;
-          orientation: vertical;
-          spacing: 24;
-          margin-top: 6;
-          margin-bottom: 6;
-          margin-start: 12;
-          margin-end: 12;
-          
-          Adw.PreferencesGroup pref_group_your_wallpapers {
-            title: 'Your backgrounds';
-            header-suffix:
-            Button {
-              styles ['flat']
+      Adw.ToolbarView {
+        [top]
+        Adw.HeaderBar header_bar {
+          [end]
+          MenuButton {
+            primary: true;
+            icon-name: 'open-menu-symbolic';
+            tooltip-text: _('Menu');
+            menu-model: primary_menu;
+          }
+        }
+
+        content:
+        ScrolledWindow {
+          child:
+          Adw.Clamp {
+            child:
+            Box {
+              vexpand: true;
+              orientation: vertical;
+              spacing: 24;
+              margin-top: 6;
+              margin-bottom: 6;
+              margin-start: 12;
+              margin-end: 12;
               
-              Adw.ButtonContent {
-                icon-name: 'list-add-symbolic';
-                label: 'Add';
+              Adw.PreferencesGroup pref_group_your_wallpapers {
+                title: 'Your backgrounds';
+                header-suffix:
+                Button btn_add_wallpaper {
+                  styles ['flat']
+                  
+                  Adw.ButtonContent {
+                    icon-name: 'list-add-symbolic';
+                    label: 'Add';
+                  }
+                };
+              }
+
+              Adw.StatusPage status_page_no_wallpapers {
+                styles ['compact']
+
+                title: 'No backgrounds';
+                icon-name: 'folder-symbolic';
+                visible: false;
+                height-request: 200;
+              }
+
+              Adw.PreferencesGroup pref_group_system_wallpapers {
+                title: 'System backgrounds';
+                description: 'These backgrounds are included with your system and cannot be changed';
               }
             };
-          }
-
-          Adw.StatusPage status_page_no_wallpapers {
-            styles ['compact']
-
-            title: 'No backgrounds';
-            icon-name: 'folder-symbolic';
-            visible: false;
-            height-request: 200;
-          }
-
-          Adw.PreferencesGroup pref_group_system_wallpapers {
-            title: 'System backgrounds';
-            description: 'These backgrounds are included with your system and cannot be changed';
-          }
+          };
         };
       };
-    };
+    }
   };
 }
 

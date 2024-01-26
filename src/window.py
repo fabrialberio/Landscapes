@@ -18,9 +18,12 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from .parser import WallpaperElement, load_wallpapers
+from .wallpaper_page import WallpaperPage
 from .wallpaper_utils import LANDSCAPES_FILE, get_thumbnail_path, wallpaper_files
 
 from gi.repository import Adw, Gtk
+
+from typing import Callable, Optional
 
 
 def update_pref_group(pref_group: Adw.PreferencesGroup, children: list[Gtk.Widget]):
@@ -57,14 +60,16 @@ class WallapaperTile(Adw.ActionRow):
     def __init__(self, wallpaper: WallpaperElement):
         super().__init__(
             title=wallpaper.name,
+            activatable=True,
         )
         super().add_prefix(WallpaperThumbnail(wallpaper))
-
 
 @Gtk.Template(resource_path='/io/github/fabrialberio/landscapes/ui/window.ui')
 class Window(Adw.ApplicationWindow):
     __gtype_name__ = 'Window'
 
+    navigation_view = Gtk.Template.Child()
+    btn_add_wallpaper = Gtk.Template.Child()
     pref_group_your_wallpapers = Gtk.Template.Child()
     status_page_no_wallpapers = Gtk.Template.Child()
     pref_group_system_wallpapers = Gtk.Template.Child()
@@ -81,11 +86,23 @@ class Window(Adw.ApplicationWindow):
         if len(your_wallpapers) > 0:
             self.status_page_no_wallpapers.set_visible(False)
             update_pref_group(self.pref_group_your_wallpapers, [
-                WallapaperTile(wallpaper) for wallpaper in your_wallpapers
+                WallapaperTile(w) for w in your_wallpapers
             ])
         else:
             self.status_page_no_wallpapers.set_visible(True)
 
-        update_pref_group(self.pref_group_system_wallpapers, [
-            WallapaperTile(wallpaper) for wallpaper in system_wallpapers
-        ])
+        tiles = []
+        for w in system_wallpapers:
+            tile = WallapaperTile(w)
+            tile.connect('activated', lambda _: self._open_wallpaper(w))
+            tiles.append(tile)
+        
+        update_pref_group(self.pref_group_system_wallpapers, tiles)
+    
+    def _open_wallpaper(self, wallpaper: WallpaperElement):
+        page = WallpaperPage(wallpaper)
+        self.navigation_view.push(Adw.NavigationPage(
+            tag='wallpaper',
+            title=wallpaper.name,
+            child=page,
+        ))
